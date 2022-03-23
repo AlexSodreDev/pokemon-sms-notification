@@ -15,6 +15,10 @@ import AWS, { SQS } from 'aws-sdk'
       const result = await sqs.receiveMessage(params).promise()
       result?.Messages?.map(async message => {
         console.log(message.Body)
+        await sqs.deleteMessage({
+          QueueUrl: queueUrl,
+          ReceiptHandle: message.ReceiptHandle
+        }).promise()
       })
     } catch (err) {
       console.log(err)
